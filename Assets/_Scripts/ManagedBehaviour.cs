@@ -5,6 +5,8 @@ public static class G
     public static Main main;
     public static UI ui;
     public static bool IsPaused;
+    public static StoryPanelController storyPanel;
+
     // здесь можно оставить какие-либо глобальные данные, ссылки на компоненты игры,
     // методы, чтобы удобно к ним обращаться из любого места
 }

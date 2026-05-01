@@ -8,6 +8,11 @@ public class Main : MonoBehaviour
         G.main = this;
     }
 
+    private void Start()
+    {
+        G.storyPanel?.PlaySequence("intro_01");
+    }
+
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
