@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     public float CurrentHealth => currentHealth;
     public float CurrentStamina => currentStamina;
+    public float MaxHealth => playerDetails.maxHealth;
+    public float MaxStamina => playerDetails.maxStamina;
     public bool IsFacingRight => isFacingRight;
     public bool IsInvincible => isInvincible;
 
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        G.player = this;
+
         healthEvent = GetComponent<HealthEvent>();
         staminaEvent = GetComponent<StaminaEvent>();
 

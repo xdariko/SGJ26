@@ -1,26 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private Image healthFillImage;
 
     private void Start()
     {
-        //var player = GameManager.Instance.GetPlayer();
-        //if (player != null)
-        //{
-        //    player.healthEvent.OnHealthChanged += HealthEvent_OnHealthChanged;
-        //    healthText.text = player.CurrentHealth.ToString();
-        //}
-
+        var player = G.player;
+        if (player != null)
+        {
+            player.healthEvent.OnHealthChanged += HealthEvent_OnHealthChanged;
+            healthFillImage.fillAmount = player.CurrentHealth / player.MaxHealth;
+        }
     }
 
     private void OnDestroy()
     {
-        //GameManager.Instance.GetPlayer().healthEvent.OnHealthChanged -= HealthEvent_OnHealthChanged;
+        G.player.healthEvent.OnHealthChanged -= HealthEvent_OnHealthChanged;
     }
 
     private void HealthEvent_OnHealthChanged(HealthEvent healthEvent, HealthEventArgs healthEventArgs)
@@ -30,6 +27,6 @@ public class HealthUI : MonoBehaviour
 
     private void SetHealthUI(HealthEventArgs healthEventArgs)
     {
-        healthText.text = healthEventArgs.Current.ToString();
+        healthFillImage.fillAmount = healthEventArgs.Current / healthEventArgs.Max;
     }
 }

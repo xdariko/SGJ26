@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0657f4ad01c307141b1751c7b7fd8ff6
+guid: 01a077c6da7148f4891b251d0c7c3235
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8115644005664255767
-    second: frame_001_0
+      213: -8969499357649314817
+    second: panel-border-001_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,13 +46,13 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 24, y: 24, z: 24, w: 24}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: frame_001_0
+      name: panel-border-001_0
       rect:
         serializedVersion: 2
-        x: 33
-        y: 15
-        width: 27
-        height: 65
+        x: 0
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71f6521893f80a070800000000000000
-      internalID: 8115644005664255767
+      spriteID: ffbd73e4bdfe58380800000000000000
+      internalID: -8969499357649314817
       vertices: []
       indices: 
       edges: []
@@ -125,8 +125,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
-    internalID: 0
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      frame_001_0: 8115644005664255767
+      panel-border-001_0: -8969499357649314817
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

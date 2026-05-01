@@ -1,26 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StaminaUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text staminaText;
+    [SerializeField] private Image staminaFillImage;
 
     private void Start()
     {
-        //var player = GameManager.Instance.GetPlayer();
-        //if (player != null)
-        //{
-        //    player.staminaEvent.OnStaminaChanged += StaminaEvent_OnStaminaChanged;
-        //    staminaText.text = player.CurrentStamina.ToString();
-        //}
+        var player = G.player;
+        if (player != null)
+        {
+            player.staminaEvent.OnStaminaChanged += StaminaEvent_OnStaminaChanged;
+            staminaFillImage.fillAmount = player.CurrentStamina / player.MaxStamina;
+        }
 
     }
 
     private void OnDestroy()
     {
-        //GameManager.Instance.GetPlayer().staminaEvent.OnStaminaChanged -= StaminaEvent_OnStaminaChanged;
+        G.player.staminaEvent.OnStaminaChanged -= StaminaEvent_OnStaminaChanged;
     }
 
     private void StaminaEvent_OnStaminaChanged(StaminaEvent staminaEvent, StaminaEventArgs staminaEventArgs)
@@ -30,6 +28,6 @@ public class StaminaUI : MonoBehaviour
 
     private void SetStaminaUI(StaminaEventArgs staminaEventArgs)
     {
-        staminaText.text = Mathf.Round(staminaEventArgs.Current).ToString();
+        staminaFillImage.fillAmount = staminaEventArgs.Current / staminaEventArgs.Max;
     }
 }
