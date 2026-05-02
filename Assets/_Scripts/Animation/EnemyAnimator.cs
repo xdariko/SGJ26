@@ -1,112 +1,92 @@
 using System.Collections;
 using UnityEngine;
 
-[DisallowMultipleComponent]
 public class EnemyAnimator : MonoBehaviour
 {
     private static readonly int StateHash = Animator.StringToHash("State");
-    private static readonly int AttackHash = Animator.StringToHash("Attack");
-    private static readonly int DeathHash = Animator.StringToHash("Death");
-    private static readonly int HitHash = Animator.StringToHash("Hit");
 
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator animator;
 
-    private EnemyAnimState _currentState;
+    private EnemyAnimState _currentState = (EnemyAnimState)(-1);
 
     private void Awake()
     {
-        if (_animator == null)
-            _animator = GetComponentInChildren<Animator>();
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
     }
 
     public void PlayState(EnemyAnimState state)
     {
-        if (_animator == null)
+        if (animator == null)
             return;
 
-        if (_currentState == state)
+        if (_currentState == state && state != EnemyAnimState.Attack)
             return;
 
         _currentState = state;
-        _animator.SetInteger(StateHash, (int)state);
+        animator.SetInteger(StateHash, (int)state);
     }
 
     public void PlayAttack()
     {
-        if (_animator == null)
+        PlayAttack(restartFromBeginning: true);
+    }
+
+    public void PlayAttack(bool restartFromBeginning)
+    {
+        if (animator == null)
             return;
 
         _currentState = EnemyAnimState.Attack;
-        _animator.SetInteger(StateHash, (int)EnemyAnimState.Attack);
-        _animator.SetTrigger(AttackHash);
+        animator.SetInteger(StateHash, (int)EnemyAnimState.Attack);
+
+        if (restartFromBeginning)
+        {
+            // Force is important for repeated attacks: it restarts the Attack clip every cycle.
+            animator.Play("Attack", 0, 0f);
+            animator.Update(0f);
+        }
     }
 
     public IEnumerator PlayAttackAndWait(float fallbackDuration)
     {
-        PlayAttack();
+        PlayAttack(restartFromBeginning: true);
         yield return WaitForAttackAnimation(fallbackDuration);
     }
 
     public IEnumerator WaitForAttackAnimation(float fallbackDuration)
     {
-        if (_animator == null)
-        {
-            yield return new WaitForSeconds(fallbackDuration);
-            yield break;
-        }
-
-        // Give the Animator one frame to consume State/Attack and start the transition.
-        yield return null;
-
-        yield return new WaitForSeconds(GetAttackAnimationDuration(fallbackDuration));
+        float duration = GetAttackClipDuration(fallbackDuration);
+        yield return new WaitForSeconds(duration);
     }
 
-    public float GetAttackAnimationDuration(float fallbackDuration)
+    private float GetAttackClipDuration(float fallbackDuration)
     {
-        if (_animator == null)
-            return fallbackDuration;
+        if (animator == null || animator.runtimeAnimatorController == null)
+            return Mathf.Max(0.01f, fallbackDuration);
 
-        RuntimeAnimatorController controller = _animator.runtimeAnimatorController;
-        if (controller != null)
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+        float bestLength = 0f;
+
+        for (int i = 0; i < clips.Length; i++)
         {
-            foreach (AnimationClip clip in controller.animationClips)
-            {
-                if (clip != null && clip.name.ToLowerInvariant().Contains("attack"))
-                    return GetScaledDuration(clip.length, fallbackDuration);
-            }
+            AnimationClip clip = clips[i];
+            if (clip == null)
+                continue;
+
+            if (clip.name.ToLowerInvariant().Contains("attack"))
+                bestLength = Mathf.Max(bestLength, clip.length);
         }
 
-        AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
-        return GetScaledDuration(stateInfo.length, fallbackDuration);
-    }
-
-    private float GetScaledDuration(float duration, float fallbackDuration)
-    {
-        if (duration <= 0f)
-            duration = fallbackDuration;
-
-        float speed = _animator != null ? Mathf.Abs(_animator.speed) : 1f;
-        if (speed <= 0f)
-            speed = 1f;
-
-        return duration / speed;
+        // If Unity does not expose the override clip here, fall back to serialized timing.
+        return Mathf.Max(0.01f, bestLength > 0f ? bestLength : fallbackDuration);
     }
 
     public void PlayDeath()
     {
-        if (_animator == null)
-            return;
-
-        _currentState = EnemyAnimState.Death;
-        _animator.SetInteger(StateHash, (int)EnemyAnimState.Death);
-        _animator.SetTrigger(DeathHash);
-    }
-
-    public void PlayHit()
-    {
-        if (_animator == null)
-            return;
-
-        _animator.SetTrigger(HitHash);
+        PlayState(EnemyAnimState.Death);
     }
 }

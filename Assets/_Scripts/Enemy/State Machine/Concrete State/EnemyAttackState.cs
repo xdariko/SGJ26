@@ -9,7 +9,6 @@ public class EnemyAttackState : EnemyState
     public override void EnterState()
     {
         base.EnterState();
-        enemy.EnemyAnimator?.PlayAttack();
         enemy.EnemyAttackBaseInstance.DoEnterLogic();
     }
 

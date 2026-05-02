@@ -65,7 +65,7 @@ public class EnemyAttackExplodeCloud : EnemyAttackSOBase
     private IEnumerator ExplodeRoutine()
     {
         if (enemy.EnemyAnimator != null)
-            yield return enemy.EnemyAnimator.WaitForAttackAnimation(_attackAnimationFallbackDuration);
+            yield return enemy.EnemyAnimator.PlayAttackAndWait(_attackAnimationFallbackDuration);
         else
             yield return new WaitForSeconds(_attackAnimationFallbackDuration);
 
