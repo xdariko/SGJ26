@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
         StateMachine.Initialize(IdleState);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         // Keep PlayerTarget up to date (find if null or destroyed)
         if (PlayerTarget == null)
@@ -63,12 +63,12 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
                 PlayerTarget = playerObj.transform;
         }
 
-        StateMachine.CurrentEnemyState.FrameUpdate();
+        StateMachine.CurrentEnemyState?.FrameUpdate();
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-        StateMachine.CurrentEnemyState.PhysicsUpdate();
+        StateMachine.CurrentEnemyState?.PhysicsUpdate();
     }
 
     #region SO Variables

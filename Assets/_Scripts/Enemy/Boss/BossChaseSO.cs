@@ -18,63 +18,68 @@ public class BossChaseSO : EnemyChaseSOBase
         navAgent2D = gameObject.GetComponent<EnemyNavMeshAgent2D>();
         agent = gameObject.GetComponent<NavMeshAgent>();
 
+        // Disable NavMeshAgent if present, we'll use Rigidbody2D directly
         if (agent != null)
         {
-            agent.speed = movementSpeed;
-            agent.stoppingDistance = stoppingDistance;
+            agent.enabled = false;
         }
+
+        Debug.Log($"[BossChaseSO] Initialized for {gameObject.name}. navAgent2D: {(navAgent2D != null ? "OK" : "NULL")}, agent disabled: {agent != null}");
     }
 
     public override void DoEnterLogic()
     {
         refreshTimer = 0f;
         enemy.MoveEnemy(Vector2.zero);
-
-        if (agent != null)
-        {
-            agent.isStopped = false;
-        }
     }
 
     public override void DoExitLogic()
     {
-        navAgent2D?.Stop();
+        //navAgent2D?.Stop(); // not needed if using direct movement
         base.DoExitLogic();
     }
 
     public override void DoFrameUpdateLogic()
     {
         // Do not call base.DoFrameUpdateLogic to avoid auto state changes
-        if (enemy.PlayerTarget == null) return; // Use enemy.PlayerTarget if available
+        if (enemy.PlayerTarget == null)
+        {
+            Debug.Log("[BossChaseSO] PlayerTarget is null, returning");
+            return;
+        }
 
         // If not aggroed, go to investigate
         if (!enemy.IsAggroed)
         {
-            navAgent2D?.Stop();
             enemy.MoveEnemy(Vector2.zero);
             enemy.InvestigationTargetPosition = enemy.PlayerTarget.position;
             enemy.StateMachine.ChangeState(enemy.InvestigateState);
             return;
         }
 
-        // Movement handled in Physics or here? Use NavMeshAgent
-        if (agent != null && agent.enabled && agent.isOnNavMesh)
+        // Direct movement towards player using Rigidbody2D
+        Vector2 direction = ((Vector2)enemy.PlayerTarget.position - (Vector2)enemy.transform.position).normalized;
+        float distanceToPlayer = Vector2.Distance(enemy.transform.position, enemy.PlayerTarget.position);
+
+        if (distanceToPlayer > stoppingDistance)
         {
-            agent.isStopped = false;
-            refreshTimer -= Time.deltaTime;
-            if (refreshTimer <= 0f)
-            {
-                refreshTimer = destinationRefreshRate;
-                navAgent2D?.MoveTo(enemy.PlayerTarget.position);
-            }
+            enemy.MoveEnemy(direction * movementSpeed);
+            Debug.Log($"[BossChaseSO] Moving towards player, dir={direction}, speed={movementSpeed}");
+        }
+        else
+        {
+            enemy.MoveEnemy(Vector2.zero);
         }
 
         // Face player based on movement direction
-        if (agent != null)
+        if (direction.sqrMagnitude > 0.001f)
         {
-            Vector2 velocity = agent.velocity;
-            if (velocity.sqrMagnitude > 0.001f)
-                enemy.CheckForLeftOrRightFacing(velocity);
+            enemy.CheckForLeftOrRightFacing(direction);
         }
+    }
+
+    public override void DoPhysicsLogic()
+    {
+        // Not needed; movement handled in FrameUpdate via MoveEnemy
     }
 }

@@ -12,15 +12,17 @@ public class EnemyStateMachine
 
     public void Initialize(EnemyState startState)
     {
+        Debug.Log($"[StateMachine] Initialize with state: {startState?.GetType().Name}");
         CurrentEnemyState = startState;
         CurrentEnemyState.EnterState();
     }
 
     public void ChangeState(EnemyState newState)
     {
-        CurrentEnemyState.ExitState();
+        Debug.Log($"[StateMachine] ChangeState: {CurrentEnemyState?.GetType().Name} -> {newState?.GetType().Name}");
+        CurrentEnemyState?.ExitState();
         CurrentEnemyState = newState;
-        CurrentEnemyState.EnterState();
+        CurrentEnemyState?.EnterState();
         _previousState = newState;
     }
 

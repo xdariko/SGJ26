@@ -15,6 +15,10 @@ GameObject:
   - component: {fileID: -5763506587001078958}
   - component: {fileID: -3748234706713780038}
   - component: {fileID: 4334195195520851418}
+  - component: {fileID: 7782811058380675287}
+  - component: {fileID: -7140609188277762708}
+  - component: {fileID: 3382282652892854449}
+  - component: {fileID: -6278442550613971518}
   m_Layer: 7
   m_Name: Tank
   m_TagString: Enemy
@@ -63,7 +67,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 071a6684a49c6274fbc365f53b2fe489, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -104,7 +108,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3074346503684442499}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -122,7 +126,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &8973368013450017566
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -192,7 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   EnemyIdleBase: {fileID: 11400000, guid: 14054160dd338ba44b9adae7aadcac88, type: 2}
   EnemyChaseBase: {fileID: 11400000, guid: bc42c33b006e9ce479fd7dc5ea54b183, type: 2}
-  EnemyInvestigateBase: {fileID: 11400000, guid: e4d55080f397d8148b98de2babc04789, type: 2}
+  EnemyInvestigateBase: {fileID: 11400000, guid: ccd5b30a07ccc86479d86f7fa006a7e8, type: 2}
   EnemyAttackBase: {fileID: 11400000, guid: 7d77f38194037374e859d03d97869668, type: 2}
   attackController: {fileID: 11400000, guid: 37e351384dc6354479e662b03c2b1c85, type: 2}
   postSpecialDelay: 0.5
@@ -221,3 +225,59 @@ NavMeshAgent:
   m_BaseOffset: 0.71133333
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &7782811058380675287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074346503684442499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc69da1fac1d834482ad5c84eeef5bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyNavMeshAgent2D
+  _destinationUpdateDistance: 0.15
+  _verticalPathDrift: 0.0001
+  _snapToNavMeshRadius: 2
+  _debugLogs: 1
+--- !u!114 &-7140609188277762708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074346503684442499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4def70b1c9ab02f4884595617590c545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAggroCheck
+--- !u!114 &3382282652892854449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074346503684442499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671609c6e5296e64690ee5b9634a403d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStrikingDistanceCheck
+--- !u!114 &-6278442550613971518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074346503684442499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a85157470039f2d4c86d2cd51715fbbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  EnemyIdleBase: {fileID: 11400000, guid: 14054160dd338ba44b9adae7aadcac88, type: 2}
+  EnemyChaseBase: {fileID: 11400000, guid: bc42c33b006e9ce479fd7dc5ea54b183, type: 2}
+  EnemyInvestigateBase: {fileID: 11400000, guid: e4d55080f397d8148b98de2babc04789, type: 2}
+  EnemyAttackBase: {fileID: 11400000, guid: 7d77f38194037374e859d03d97869668, type: 2}

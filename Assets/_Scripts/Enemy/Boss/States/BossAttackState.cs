@@ -75,6 +75,7 @@ public class BossAttackState : EnemyAttackState
         foreach (Collider2D col in hit)
         {
             if (col.CompareTag("Player") || col.CompareTag("PlayerProjectile")) continue;
+            if (col.gameObject == enemy.gameObject) continue; // Prevent self-damage
             IDamageable d = col.GetComponent<IDamageable>();
             d?.TakeDamage(p.damage);
         }

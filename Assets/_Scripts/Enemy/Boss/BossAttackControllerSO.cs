@@ -121,10 +121,13 @@ public class BossAttackControllerSO : ScriptableObject
         {
             cooldownTimers[i] = 0f;
         }
+        Debug.Log($"[BossAttackController] Initialized for boss: {boss.name}, abilities count: {abilities.Count}");
     }
 
     public virtual void UpdateAbilities(BossEnemy boss, EnemyStateMachine stateMachine)
     {
+        Debug.Log($"[BossAttackController] UpdateAbilities: IsPerformingSpecial={boss.IsPerformingSpecial}, IsAggroed={boss.IsAggroed}, CurrentState={stateMachine?.CurrentEnemyState?.GetType().Name}");
+
         if (boss == null) return;
 
         // Update cooldowns always
@@ -145,12 +148,16 @@ public class BossAttackControllerSO : ScriptableObject
             BossAbilityEntry entry = abilities[i];
             if (cooldownTimers[i] > 0f) continue;
 
-            if (!CanUseAbility(i, boss)) continue;
+            bool canUse = CanUseAbility(i, boss);
+            Debug.Log($"[BossAttackController] Checking ability {i} ({entry.Type}): CanUse={canUse}, Cooldown={cooldownTimers[i]:F2}");
+
+            if (!canUse) continue;
 
             bool isSpecial = IsSpecialAbility(entry.Type);
 
             if (isSpecial)
             {
+                Debug.Log($"[BossAttackController] >>> Using SPECIAL ability {i} ({entry.Type})");
                 cooldownTimers[i] = entry.Cooldown;
                 boss.StartSpecialAbility(i);
             }
@@ -159,9 +166,14 @@ public class BossAttackControllerSO : ScriptableObject
                 // Normal attack - ensure we set index before state change
                 if (stateMachine.CurrentEnemyState is not EnemyAttackState)
                 {
+                    Debug.Log($"[BossAttackController] >>> Using NORMAL attack {i} ({entry.Type}), changing to AttackState");
                     SetCurrentAttackIndex(i);
                     cooldownTimers[i] = entry.Cooldown;
                     stateMachine.ChangeState(boss.AttackState);
+                }
+                else
+                {
+                    Debug.Log($"[BossAttackController] Skipping attack {i} because already in AttackState");
                 }
             }
 
@@ -172,15 +184,26 @@ public class BossAttackControllerSO : ScriptableObject
     protected virtual bool CanUseAbility(int index, BossEnemy boss)
     {
         BossAbilityEntry entry = abilities[index];
-        if (!boss.IsAggroed) return false;
+        if (!boss.IsAggroed)
+        {
+            Debug.Log($"[CanUseAbility] {index} ({entry.Type}): FAILED - not aggroed");
+            return false;
+        }
 
         Transform player = boss.PlayerTarget;
-        if (player == null) return false;
+        if (player == null)
+        {
+            Debug.Log($"[CanUseAbility] {index} ({entry.Type}): FAILED - PlayerTarget is null");
+            return false;
+        }
 
         // Check distance to player
         float distanceToPlayer = Vector3.Distance(boss.transform.position, player.position);
         if (distanceToPlayer < entry.MinRange || distanceToPlayer > entry.MaxRange)
+        {
+            Debug.Log($"[CanUseAbility] {index} ({entry.Type}): FAILED - distance {distanceToPlayer:F2} not in range [{entry.MinRange}, {entry.MaxRange}]");
             return false;
+        }
 
         // Line of sight check
         if (entry.RequireLineOfSight)
@@ -188,9 +211,13 @@ public class BossAttackControllerSO : ScriptableObject
             Vector2 dir = (player.position - boss.transform.position).normalized;
             RaycastHit2D hit = Physics2D.Raycast(boss.transform.position, dir, distanceToPlayer);
             if (hit.collider != null && !hit.collider.CompareTag("Player"))
+            {
+                Debug.Log($"[CanUseAbility] {index} ({entry.Type}): FAILED - no line of sight, hit {hit.collider.gameObject.name}");
                 return false;
+            }
         }
 
+        Debug.Log($"[CanUseAbility] {index} ({entry.Type}): PASSED - distance {distanceToPlayer:F2}");
         return true;
     }
 
@@ -215,21 +242,24 @@ public class BossAttackControllerSO : ScriptableObject
 
     public virtual EnemyState CreateSpecialState(int abilityIndex, BossEnemy boss)
     {
-        if (abilityIndex < 0 || abilityIndex >= abilities.Count) return null;
+        if (abilityIndex < 0 || abilityIndex >= abilities.Count)
+        {
+            Debug.LogWarning($"[BossAttackController] CreateSpecialState: abilityIndex {abilityIndex} out of range");
+            return null;
+        }
         BossAbilityEntry entry = abilities[abilityIndex];
         EnemyStateMachine sm = boss.StateMachine;
 
-        switch (entry.Type)
+        EnemyState state = entry.Type switch
         {
-            case AbilityType.Charge:
-                return new BossChargeState(boss, sm, entry.charge);
-            case AbilityType.Dash:
-                return new BossDashState(boss, sm, entry.dash);
-            case AbilityType.Summon:
-                return new BossSummonState(boss, sm, entry.summon);
-            default:
-                return null;
-        }
+            AbilityType.Charge => new BossChargeState(boss, sm, entry.charge),
+            AbilityType.Dash => new BossDashState(boss, sm, entry.dash),
+            AbilityType.Summon => new BossSummonState(boss, sm, entry.summon),
+            _ => null
+        };
+
+        Debug.Log($"[BossAttackController] CreateSpecialState: abilityIndex={abilityIndex}, type={entry.Type}, stateCreated={state != null}");
+        return state;
     }
 
     public virtual string GetSpecialAnimation(int abilityIndex)

@@ -28,16 +28,19 @@ public class BossEnemy : Enemy
     {
         base.Awake();
         Animator = GetComponent<Animator>();
+        Debug.Log($"[BossEnemy] Awake: Animator present: {Animator != null}");
     }
 
     protected override void Start()
     {
         base.Start();
+        Debug.Log($"[BossEnemy] Start: attackController={(attackController != null ? attackController.name : "NULL")}");
         if (attackController != null)
         {
             attackController.Initialize(this);
             bossAttackState = new BossAttackState(this, StateMachine, attackController);
             AttackState = bossAttackState;
+            Debug.Log($"[BossEnemy] BossAttackState created and assigned. Abilities count: {attackController.abilities?.Count ?? 0}");
         }
         else
         {
@@ -48,12 +51,19 @@ public class BossEnemy : Enemy
         VulnerableToHook = false;
     }
 
-    protected virtual void Update()
+    private new void Update()
     {
+        base.Update();
         if (!IsPerformingSpecial)
         {
             attackController?.UpdateAbilities(this, StateMachine);
         }
+        Debug.Log($"[BossEnemy] Update: IsAggroed={IsAggroed}, State={StateMachine?.CurrentEnemyState?.GetType().Name}, PlayerTargetExists={PlayerTarget != null}, IsPerformingSpecial={IsPerformingSpecial}");
+    }
+
+    private new void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
 
     public virtual void StartSpecialAbility(int abilityIndex)
@@ -61,12 +71,17 @@ public class BossEnemy : Enemy
         if (IsPerformingSpecial) return;
         if (attackController == null) return;
 
+        Debug.Log($"[BossEnemy] StartSpecialAbility: abilityIndex={abilityIndex}, type={attackController.GetSpecialAnimation(abilityIndex)}");
         IsPerformingSpecial = true;
 
         EnemyState specialState = attackController.CreateSpecialState(abilityIndex, this);
         if (specialState != null)
         {
             StateMachine.ChangeState(specialState);
+        }
+        else
+        {
+            Debug.LogWarning($"[BossEnemy] CreateSpecialState returned null for abilityIndex {abilityIndex}");
         }
 
         string animTrigger = attackController.GetSpecialAnimation(abilityIndex);

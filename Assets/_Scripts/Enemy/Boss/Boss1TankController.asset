@@ -65,11 +65,11 @@ MonoBehaviour:
       animationTrigger: 
     currentCooldown: 0
   - Type: 3
-    Cooldown: 0
+    Cooldown: 5
     ChanceWeight: 0
     RequireLineOfSight: 0
-    MinRange: 0
-    MaxRange: 0
+    MinRange: 4
+    MaxRange: 10
     meleeSlam:
       damage: 0
       radius: 0

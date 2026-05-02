@@ -2337,6 +2337,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_CloudExploder
       objectReference: {fileID: 0}
+    - target: {fileID: 2341976678702300400, guid: ae992fc2fa1ac9d4a99b5c3fcccee360, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4445777809426457349, guid: ae992fc2fa1ac9d4a99b5c3fcccee360, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.32
@@ -5705,6 +5709,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_RangedShooter
       objectReference: {fileID: 0}
+    - target: {fileID: 662649370269247422, guid: 44fbdfc3e5b01ad49aff28263a8122bb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1441424740213979211, guid: 44fbdfc3e5b01ad49aff28263a8122bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.412947
@@ -5761,13 +5769,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5763506587001078958, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: _maxHealth
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 2957922076372244091, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.4
+      value: -7.43
       objectReference: {fileID: 0}
     - target: {fileID: 2957922076372244091, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.5
+      value: -3.51
       objectReference: {fileID: 0}
     - target: {fileID: 2957922076372244091, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7461,6 +7473,10 @@ PrefabInstance:
     - target: {fileID: 7478235714970971148, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
       propertyPath: m_Name
       value: Slime
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478235714970971148, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8861619515131884537, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
       propertyPath: m_LocalPosition.x
