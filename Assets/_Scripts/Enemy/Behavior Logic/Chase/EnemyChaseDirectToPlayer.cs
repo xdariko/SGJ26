@@ -1,31 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "Chase-Direct To Player", menuName = "Enemy Logic/Chase Logic/Direct To Player")]
 public class EnemyChaseDirectToPlayer : EnemyChaseSOBase
 {
     [SerializeField] private float _movementSpeed = 1.75f;
+    [SerializeField] private float _stoppingDistance = 0.9f;
+    [SerializeField] private float _destinationRefreshRate = 0.1f;
 
-    public override void DoAnimationTriggerEventLogic(Enemy.AnimationTriggerType triggerType)
+    private EnemyNavMeshAgent2D _navMeshAgent2D;
+    private NavMeshAgent _agent;
+    private float _refreshTimer;
+
+    public override void Initialize(GameObject gameObject, Enemy enemy)
     {
-        base.DoAnimationTriggerEventLogic(triggerType);
+        base.Initialize(gameObject, enemy);
+        _navMeshAgent2D = gameObject.GetComponent<EnemyNavMeshAgent2D>();
+        _agent = gameObject.GetComponent<NavMeshAgent>();
     }
 
     public override void DoEnterLogic()
     {
-        base.DoEnterLogic();
+        // Не вызываем base.DoEnterLogic(): в базовом методе сейчас пусто.
+        _refreshTimer = 0f;
+        enemy.MoveEnemy(Vector2.zero);
+
+        if (_agent != null)
+        {
+            _agent.updateRotation = false;
+            _agent.updateUpAxis = false;
+            _agent.speed = _movementSpeed;
+            _agent.stoppingDistance = _stoppingDistance;
+            _agent.isStopped = false;
+        }
     }
 
     public override void DoExitLogic()
     {
+        _navMeshAgent2D?.Stop();
         base.DoExitLogic();
     }
 
     public override void DoFrameUpdateLogic()
     {
+        // Не вызываем base.DoFrameUpdateLogic(), потому что после ChangeState нельзя продолжать SetDestination.
+        if (playerTransform == null)
+            return;
+
         if (enemy.IsWithinStrikingDistance)
         {
+            _navMeshAgent2D?.Stop();
             enemy.MoveEnemy(Vector2.zero);
             enemy.StateMachine.ChangeState(enemy.AttackState);
             return;
@@ -33,28 +59,35 @@ public class EnemyChaseDirectToPlayer : EnemyChaseSOBase
 
         if (!enemy.IsAggroed)
         {
+            _navMeshAgent2D?.Stop();
             enemy.MoveEnemy(Vector2.zero);
             enemy.InvestigationTargetPosition = playerTransform.position;
             enemy.StateMachine.ChangeState(enemy.InvestigateState);
             return;
         }
 
-        Vector2 moveDirection = (playerTransform.position - enemy.transform.position).normalized;
-        enemy.MoveEnemy(moveDirection * _movementSpeed);
+        if (_agent == null || !_agent.enabled || !_agent.isOnNavMesh)
+            return;
+
+        _agent.isStopped = false;
+
+        _refreshTimer -= Time.deltaTime;
+        if (_refreshTimer <= 0f)
+        {
+            _refreshTimer = _destinationRefreshRate;
+            _navMeshAgent2D?.MoveTo(playerTransform.position);
+        }
+
+        FacePlayerByAgentVelocity();
     }
 
-    public override void DoPhysicsLogic()
+    private void FacePlayerByAgentVelocity()
     {
-        base.DoPhysicsLogic();
-    }
+        if (_agent == null)
+            return;
 
-    public override void Initialize(GameObject gameObject, Enemy enemy)
-    {
-        base.Initialize(gameObject, enemy);
-    }
-
-    public override void ResetValues()
-    {
-        base.ResetValues();
+        Vector2 velocity = _agent.velocity;
+        if (velocity.sqrMagnitude > 0.001f)
+            enemy.CheckForLeftOrRightFacing(velocity);
     }
 }

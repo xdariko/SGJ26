@@ -15,9 +15,8 @@ MonoBehaviour:
   screamerSound: {fileID: 0}
   _damage: 10
   _attackCooldown: 1
-  _attackWindup: 0.25
-  _attackRange: 1
-  _attackRadius: 0.45
+  _attackWindup: 0.2
+  _attackRadius: 1
   _playerLayer:
     serializedVersion: 2
     m_Bits: 8
