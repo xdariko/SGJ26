@@ -10,6 +10,8 @@ public class RangedAbility : BaseAbility
     [SerializeField] private float projectileLifetime = 3f;
     [SerializeField] private int maxPiercingCount = 0; // 0 = no piercing
 
+    [Header("Camera Shake")]
+    [SerializeField] private float screenShakeForce = 0.25f;
     protected override void UseAbility(Player player)
     {
         if (player == null || projectilePrefab == null) return;
@@ -49,6 +51,7 @@ public class RangedAbility : BaseAbility
         }
 
         InstantiateVisualEffect(player.transform.position, Quaternion.LookRotation(shootDirection));
+        G.screenShake?.Shake(screenShakeForce);
         Debug.Log($"Fired ranged projectile in direction {shootDirection}!");
         InvokeOnAbilityUsed();
     }

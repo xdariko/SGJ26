@@ -10,6 +10,9 @@ public class HookAbility : BaseAbility
     [SerializeField] private float hookDuration = 3f;
     [SerializeField] private float enhancedAttackWindow = 2f;
 
+    [Header("Camera Shake")]
+    [SerializeField] private float screenShakeForce = 0.2f;
+
     private HookProjectile activeHook;
     private bool isHookActive = false;
     private float enhancedWindowEndTime = 0f;
@@ -55,6 +58,7 @@ public class HookAbility : BaseAbility
         }
 
         InvokeOnAbilityUsed();
+        G.screenShake?.Shake(screenShakeForce);
         Debug.Log("Fired hook!");
     }
 

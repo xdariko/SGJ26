@@ -324,6 +324,7 @@ GameObject:
   - component: {fileID: 489669220150227655}
   - component: {fileID: 243133697005948003}
   - component: {fileID: 5006114511168249515}
+  - component: {fileID: 5221622975411403084}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -374,7 +375,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 071a6684a49c6274fbc365f53b2fe489, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -398,7 +399,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -503,6 +504,24 @@ MonoBehaviour:
   _maxHealth: 100
   _destroyOnDeath: 1
   _destroyDelay: 0.1
+  _damagePopupPrefab: {fileID: 1745006277687862475, guid: 253cecb3047f4734dad01b28ecb152dc, type: 3}
+  _damagePopupOffset: {x: 0, y: 0.4, z: 0}
+  _damagePopupRandomX: 0.2
+--- !u!114 &5221622975411403084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3608691740417266209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57771373341114e429c3bedcddf6c677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitEffect
+  duration: 0.25
+  hitSounds: []
+  hitSoundVolume: 1
 --- !u!1 &7265316491538826345
 GameObject:
   m_ObjectHideFlags: 0

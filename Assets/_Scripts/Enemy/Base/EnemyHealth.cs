@@ -10,8 +10,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     [SerializeField] private bool _destroyOnDeath = true;
     [SerializeField] private float _destroyDelay = 0.1f;
 
+    [Header("Damage Popup")]
+    [SerializeField] private DamagePopup _damagePopupPrefab;
+    [SerializeField] private Vector3 _damagePopupOffset = new Vector3(0f, 0.75f, 0f);
+    [SerializeField] private float _damagePopupRandomX = 0.25f;
+
     private float _currentHealth;
     private bool _isDead;
+
+    private HitEffect _hitEffect;
 
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
@@ -24,6 +31,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     private void Awake()
     {
         _currentHealth = _maxHealth;
+        _hitEffect = GetComponent<HitEffect>();
     }
 
     public void TakeDamage(float damage)
@@ -34,6 +42,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         float oldHealth = _currentHealth;
         _currentHealth = Mathf.Max(0f, _currentHealth - damage);
         float delta = _currentHealth - oldHealth;
+
+        ShowDamagePopup(damage);
+
+        if (_hitEffect != null)
+            _hitEffect.ApplyHitEffect();
 
         OnHealthChanged?.Invoke(_currentHealth, _maxHealth, delta);
 
@@ -51,6 +64,18 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         float delta = _currentHealth - oldHealth;
 
         OnHealthChanged?.Invoke(_currentHealth, _maxHealth, delta);
+    }
+
+    private void ShowDamagePopup(float damage)
+    {
+        if (_damagePopupPrefab == null)
+            return;
+
+        Vector3 spawnPosition = transform.position + _damagePopupOffset;
+        spawnPosition.x += UnityEngine.Random.Range(-_damagePopupRandomX, _damagePopupRandomX);
+
+        DamagePopup popup = Instantiate(_damagePopupPrefab, spawnPosition, Quaternion.identity);
+        popup.Setup(damage);
     }
 
     private void Die()

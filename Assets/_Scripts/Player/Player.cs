@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     [HideInInspector] public HealthEvent healthEvent;
     [HideInInspector] public StaminaEvent staminaEvent;
 
+    private HitEffect hitEffect;
+
     private float currentHealth;
     private float currentStamina;
     private bool isInvincible = false;
@@ -35,9 +37,41 @@ public class Player : MonoBehaviour
 
         healthEvent = GetComponent<HealthEvent>();
         staminaEvent = GetComponent<StaminaEvent>();
+        hitEffect = GetComponent<HitEffect>();
 
         currentHealth = playerDetails.maxHealth;
         currentStamina = playerDetails.maxStamina;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        TakeDamage(damage, null);
+    }
+
+    public void TakeDamage(float damage, GameObject attacker = null)
+    {
+        if (isInvincible)
+        {
+            Debug.Log("Player is invincible, damage blocked!");
+            return;
+        }
+
+        if (damage <= 0f)
+            return;
+
+        float newHealth = Mathf.Max(0, currentHealth - damage);
+        float delta = damage;
+        currentHealth = newHealth;
+
+        if (hitEffect != null)
+            hitEffect.ApplyHitEffect();
+
+        healthEvent.CallHealthChanged(currentHealth, playerDetails.maxHealth, delta);
+
+        if (newHealth <= 0)
+        {
+            Debug.Log("Player died!");
+        }
     }
 
     private void Update()
@@ -61,15 +95,6 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Game Over!");
         }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        float newHealth = Mathf.Max(0, currentHealth - damage);
-        float delta = damage;
-        currentHealth = newHealth;
-
-        healthEvent.CallHealthChanged(currentHealth, playerDetails.maxHealth, delta);
     }
 
     private void RegenerateStamina()
@@ -113,26 +138,5 @@ public class Player : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = facingRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
         transform.localScale = scale;
-    }
-
-    public void TakeDamage(float damage, GameObject attacker = null)
-    {
-        if (isInvincible)
-        {
-            Debug.Log("Player is invincible, damage blocked!");
-            return;
-        }
-
-        float newHealth = Mathf.Max(0, currentHealth - damage);
-        float delta = damage;
-        currentHealth = newHealth;
-
-        healthEvent.CallHealthChanged(currentHealth, playerDetails.maxHealth, delta);
-
-        if (newHealth <= 0)
-        {
-            // Player died - would need to implement death logic
-            Debug.Log("Player died!");
-        }
     }
 }

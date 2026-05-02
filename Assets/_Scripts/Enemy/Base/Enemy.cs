@@ -128,8 +128,7 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
     #endregion
 
     #region Animation Triggers
-
-    private void AnimationTriggerEvent(AnimationTriggerType triggerType)
+    public void TriggerAnimationEvent(AnimationTriggerType triggerType)
     {
         StateMachine.CurrentEnemyState.AnimationTriggerEvent(triggerType);
     }

@@ -10,6 +10,9 @@ public class AreaAttackAbility : BaseAbility
     [SerializeField] private GameObject areaIndicatorPrefab;
     [SerializeField] private float indicatorDuration = 0.5f;
 
+    [Header("Camera Shake")]
+    [SerializeField] private float screenShakeForce = 0.6f;
+
     protected override void UseAbility(Player player)
     {
         if (player == null) return;
@@ -28,6 +31,7 @@ public class AreaAttackAbility : BaseAbility
         PerformAreaAttack(player.transform.position);
 
         InstantiateVisualEffect(player.transform.position, Quaternion.identity);
+        G.screenShake?.Shake(screenShakeForce);
         Debug.Log($"Area attack with radius {attackRadius}!");
         InvokeOnAbilityUsed();
     }

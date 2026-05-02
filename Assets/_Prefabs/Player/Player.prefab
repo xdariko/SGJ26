@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 1886755253695926385}
   - component: {fileID: 3824397034592166607}
   - component: {fileID: 9142164308260497350}
+  - component: {fileID: 4313297476557741172}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -164,7 +165,6 @@ MonoBehaviour:
   rangedAbility: {fileID: 11400000, guid: b37b1c3eb55bb2442b91b27928c3b313, type: 2}
   hookAbility: {fileID: 11400000, guid: 8d295801d58b3fd4f8c2cfcbe522b154, type: 2}
   areaAttackAbility: {fileID: 11400000, guid: baac943e52d290047abab64e8d012e5e, type: 2}
-  dashAbility: {fileID: 11400000, guid: 9d0a38c86453dec439c5453a178f8622, type: 2}
   autoSetupPlayer: 1
   unlockAllAbilitiesByDefault: 0
 --- !u!114 &-4561844795223832708
@@ -183,11 +183,7 @@ MonoBehaviour:
   rangedAbility: {fileID: 0}
   hookAbility: {fileID: 0}
   areaAttackAbility: {fileID: 0}
-  dashAbility: {fileID: 0}
-  primaryAttackKey: 323
-  secondaryAttackKey: 324
-  tertiaryAttackKey: 32
-  dashKey: 304
+  switchAbilityKey: 19
 --- !u!114 &1886755253695926385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,6 +222,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AbilityManager
   abilities: []
   playerCombat: {fileID: 0}
+--- !u!114 &4313297476557741172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2153398447405136414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57771373341114e429c3bedcddf6c677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitEffect
+  duration: 0.25
+  hitSounds: []
+  hitSoundVolume: 1
 --- !u!1 &4931124534402394375
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +295,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 071a6684a49c6274fbc365f53b2fe489, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

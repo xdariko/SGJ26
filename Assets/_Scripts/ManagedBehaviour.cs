@@ -7,6 +7,8 @@ public static class G
     public static bool IsPaused;
     public static StoryPanelController storyPanel;
     public static Player player;
+    public static ScreenShake screenShake;
+
     // здесь можно оставить какие-либо глобальные данные, ссылки на компоненты игры,
     // методы, чтобы удобно к ним обращаться из любого места
 }
