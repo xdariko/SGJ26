@@ -12,25 +12,25 @@ public class RangedProjectile : MonoBehaviour
 
     public void Initialize(Vector2 direction, float speed, float damage, float lifetime, int piercingCount, GameObject owner)
     {
-        this.direction = direction;
+        this.direction = direction.normalized;
         this.speed = speed;
         this.damage = damage;
         this.lifetime = lifetime;
-        this.piercingCount = piercingCount;
+        this.piercingCount = Mathf.Max(1, piercingCount);
         this.owner = owner;
 
         rb = GetComponent<Rigidbody2D>();
-        if (rb == null)
-        {
-            rb = gameObject.AddComponent<Rigidbody2D>();
-        }
 
-        rb.linearVelocity = direction * speed;
+        if (rb == null)
+            rb = gameObject.AddComponent<Rigidbody2D>();
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.linearVelocity = this.direction * speed;
 
-        // Rotate sprite to face direction of movement
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(this.direction.y, this.direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         Destroy(gameObject, lifetime);
@@ -38,36 +38,49 @@ public class RangedProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Ignore owner and triggers
-        if (other.gameObject == owner || other.isTrigger) return;
+        HandleHit(other);
+    }
 
-        // Check if hit enemy
-        if (other.TryGetComponent<Enemy>(out var enemy))
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        HandleHit(collision.collider);
+    }
+
+    private void HandleHit(Collider2D other)
+    {
+        if (other == null)
+            return;
+
+        if (other.gameObject == owner || other.transform.IsChildOf(owner.transform))
+            return;
+
+        if (other.CompareTag("Player") || other.CompareTag("PlayerProjectile"))
+            return;
+
+        IDamageable damageable = other.GetComponentInParent<IDamageable>();
+
+        if (damageable != null)
         {
-            // Deal damage to enemy
-            // enemy.TakeDamage(damage); // Would need to implement in Enemy class
+            damageable.TakeDamage(damage);
 
-            // Reduce piercing count
             piercingCount--;
 
-            if (piercingCount <= 0)
-            {
-                DestroyProjectile();
-            }
+            Debug.Log($"Projectile hit {other.name} for {damage} damage! Piercing left: {piercingCount}");
 
-            Debug.Log($"Projectile hit {enemy.name} for {damage} damage! Piercing left: {piercingCount}");
+            if (piercingCount <= 0)
+                DestroyProjectile();
+
+            return;
         }
-        else if (!other.CompareTag("Player") && !other.CompareTag("PlayerProjectile"))
-        {
-            // Hit non-enemy object, destroy projectile
-            DestroyProjectile();
-        }
+
+        if (other.isTrigger)
+            return;
+
+        DestroyProjectile();
     }
 
     private void DestroyProjectile()
     {
-        // Add impact effect if available
-        // Instantiate(impactEffect, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 }

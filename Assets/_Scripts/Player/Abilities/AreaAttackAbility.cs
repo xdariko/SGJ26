@@ -34,16 +34,16 @@ public class AreaAttackAbility : BaseAbility
 
     private void PerformAreaAttack(Vector2 center)
     {
-        // Detect enemies in area
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(center, attackRadius, enemyLayer);
 
         foreach (var enemyCollider in hitEnemies)
         {
-            if (enemyCollider.TryGetComponent<Enemy>(out var enemy))
+            IDamageable damageable = enemyCollider.GetComponentInParent<IDamageable>();
+
+            if (damageable != null)
             {
-                // Deal damage to enemy
-                // enemy.TakeDamage(attackDamage); // Would need to implement in Enemy class
-                Debug.Log($"Area attack hit {enemy.name} for {attackDamage} damage!");
+                damageable.TakeDamage(attackDamage);
+                Debug.Log($"Area attack hit {enemyCollider.name} for {attackDamage} damage!");
             }
         }
     }

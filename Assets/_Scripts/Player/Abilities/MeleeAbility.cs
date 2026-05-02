@@ -33,33 +33,31 @@ public class MeleeAbility : BaseAbility
 
     private void PerformMeleeAttack(Vector2 origin, Vector2 direction)
     {
-        // Create a semi-circle (pie slice) attack area in front of the player
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        float halfAngle = 90f; // 180 degree arc (semi-circle)
+        float halfAngle = 90f;
 
-        // Detect enemies in the semi-circle area
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(origin, attackRange, enemyLayer);
 
         foreach (var enemyCollider in hitEnemies)
         {
-            if (enemyCollider.TryGetComponent<Enemy>(out var enemy))
+            Vector2 toEnemy = ((Vector2)enemyCollider.transform.position - origin).normalized;
+            float angleToEnemy = Mathf.Atan2(toEnemy.y, toEnemy.x) * Mathf.Rad2Deg;
+            float angleDiff = Mathf.DeltaAngle(angle, angleToEnemy);
+
+            if (Mathf.Abs(angleDiff) > halfAngle)
+                continue;
+
+            float finalDamage = attackDamage;
+
+            if (isEnhanced)
+                finalDamage *= enhancedDamageMultiplier;
+
+            IDamageable damageable = enemyCollider.GetComponentInParent<IDamageable>();
+
+            if (damageable != null)
             {
-                // Check if enemy is within the attack arc
-                Vector2 toEnemy = ((Vector2)enemyCollider.transform.position - origin).normalized;
-                float angleToEnemy = Mathf.Atan2(toEnemy.y, toEnemy.x) * Mathf.Rad2Deg;
-                float angleDiff = Mathf.DeltaAngle(angle, angleToEnemy);
-
-                if (Mathf.Abs(angleDiff) <= halfAngle)
-                {
-                    float finalDamage = attackDamage;
-                    if (isEnhanced)
-                    {
-                        finalDamage *= enhancedDamageMultiplier;
-                    }
-
-                    // In a real implementation, this would call enemy.TakeDamage(finalDamage)
-                    Debug.Log($"Hit {enemy.name} with {(isEnhanced ? "enhanced " : "")}melee attack for {finalDamage} damage! (Angle diff: {angleDiff}°)");
-                }
+                damageable.TakeDamage(finalDamage);
+                Debug.Log($"Hit {enemyCollider.name} with {(isEnhanced ? "enhanced " : "")}melee attack for {finalDamage} damage!");
             }
         }
     }
