@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6186997860984094253
+--- !u!1001 &1338969202181648081
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -22,11 +22,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 192.21083
+      value: -9.44356
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 938.43353
+      value: -1.76605
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -66,12 +66,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3608691740417266209, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_Name
-      value: Slime
+      value: Enemy Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5098858942915450473, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: EnemyAttackBase
       value: 
-      objectReference: {fileID: 11400000, guid: 1a93d0e93ac3b2b429666759520f8f85, type: 2}
+      objectReference: {fileID: 11400000, guid: a663e9e1cd2b2bb42a24c34d09a26eaf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

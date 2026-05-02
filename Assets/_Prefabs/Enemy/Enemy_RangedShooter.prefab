@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6186997860984094253
+--- !u!1001 &4262254711127537055
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,23 +10,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 192.21083
+      value: -8.73
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 938.43353
+      value: -3.6
       objectReference: {fileID: 0}
     - target: {fileID: 3397519765232946644, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -66,12 +66,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3608691740417266209, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_Name
-      value: Slime
+      value: Enemy_RangedShooter
       objectReference: {fileID: 0}
+    - target: {fileID: 5098858942915450473, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: EnemyIdleBase
+      value: 
+      objectReference: {fileID: 11400000, guid: e7bd7b6d72cbe2f46ba36688ee0ecac9, type: 2}
+    - target: {fileID: 5098858942915450473, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: EnemyChaseBase
+      value: 
+      objectReference: {fileID: 11400000, guid: d57dbe193ce386f49bafe3df367f10e8, type: 2}
     - target: {fileID: 5098858942915450473, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: EnemyAttackBase
       value: 
-      objectReference: {fileID: 11400000, guid: 1a93d0e93ac3b2b429666759520f8f85, type: 2}
+      objectReference: {fileID: 11400000, guid: c2d74f3bf1901594a824e9eef2ac1ac4, type: 2}
+    - target: {fileID: 5098858942915450473, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: EnemyInvestigateBase
+      value: 
+      objectReference: {fileID: 11400000, guid: b7feaaf26362bbc438cbdc429cfea577, type: 2}
+    - target: {fileID: 5991959953902949259, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9220598
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991959953902949259, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
