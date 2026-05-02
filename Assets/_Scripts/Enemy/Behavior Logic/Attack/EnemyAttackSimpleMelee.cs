@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Attack-Simple Melee", menuName = "Enemy Logic/Attack Logic/Simple Melee")]
 public class EnemyAttackSimpleMelee : EnemyAttackSOBase
@@ -7,7 +8,8 @@ public class EnemyAttackSimpleMelee : EnemyAttackSOBase
     [Header("Attack Settings")]
     [SerializeField] private float _damage = 10f;
     [SerializeField] private float _attackCooldown = 1f;
-    [SerializeField] private float _attackWindup = 0.2f;
+    [FormerlySerializedAs("_attackWindup")]
+    [SerializeField] private float _attackAnimationFallbackDuration = 0.2f;
     [SerializeField] private float _attackRadius = 1f;
     [SerializeField] private LayerMask _playerLayer;
 
@@ -58,17 +60,29 @@ public class EnemyAttackSimpleMelee : EnemyAttackSOBase
 
     private IEnumerator AttackLoop()
     {
+        bool isFirstAttackInState = true;
+
         while (enemy.IsAggroed && enemy.IsWithinStrikingDistance)
         {
             StopEnemyCompletely();
             FacePlayer();
 
-            // enemy.GetComponent<Animator>()?.SetTrigger("Attack");
+            if (enemy.EnemyAnimator != null)
+            {
+                if (isFirstAttackInState)
+                    yield return enemy.EnemyAnimator.WaitForAttackAnimation(_attackAnimationFallbackDuration);
+                else
+                    yield return enemy.EnemyAnimator.PlayAttackAndWait(_attackAnimationFallbackDuration);
+            }
+            else
+            {
+                yield return new WaitForSeconds(_attackAnimationFallbackDuration);
+            }
 
-            yield return new WaitForSeconds(_attackWindup);
+            isFirstAttackInState = false;
 
-            StopEnemyCompletely();
-            TryDamagePlayer();
+            if (enemy.IsAggroed && enemy.IsWithinStrikingDistance)
+                TryDamagePlayer();
 
             yield return new WaitForSeconds(_attackCooldown);
         }

@@ -89,6 +89,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (enemy != null)
             enemy.MoveEnemy(Vector2.zero);
 
+        EnemyAnimator enemyAnimator = GetComponentInChildren<EnemyAnimator>();
+        if (enemyAnimator != null)
+            enemyAnimator.PlayDeath();
+
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         if (agent != null && agent.enabled && agent.isOnNavMesh)
         {

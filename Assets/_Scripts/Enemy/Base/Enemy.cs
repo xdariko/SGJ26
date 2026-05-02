@@ -14,9 +14,15 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
 
     public Vector3 InvestigationTargetPosition { get; set; }
     public float InvestigationDuration { get; set; } = 3f;
+    public EnemyAnimator EnemyAnimator { get; private set; }
 
     private void Awake()
     {
+        EnemyAnimator = GetComponentInChildren<EnemyAnimator>();
+
+        if (EnemyAnimator == null)
+            EnemyAnimator = gameObject.AddComponent<EnemyAnimator>();
+
         EnemyIdleBaseInstance = Instantiate(EnemyIdleBase);
         EnemyChaseBaseInstance = Instantiate(EnemyChaseBase);
         EnemyInvestigateBaseInstance = Instantiate(EnemyInvestigateBase);
@@ -37,7 +43,7 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
                 col.radius = agent.radius;
             else
                 col.radius = 0.5f;
-        }
+        }   
     }
 
     private void Start()
@@ -138,17 +144,4 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
 
     #endregion
 
-    #region Animation Triggers
-    public void TriggerAnimationEvent(AnimationTriggerType triggerType)
-    {
-        StateMachine.CurrentEnemyState.AnimationTriggerEvent(triggerType);
-    }
-
-    public enum AnimationTriggerType
-    {
-        EnemyDamaged,
-        PlayFootstepSound
-    }
-
-    #endregion
 }

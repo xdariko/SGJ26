@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "Attack-Ranged Projectile", menuName = "Enemy Logic/Attack Logic/Ranged Projectile")]
@@ -14,7 +15,8 @@ public class EnemyAttackRangedProjectile : EnemyAttackSOBase
 
     [Header("Attack Timing")]
     [SerializeField] private float _attackCooldown = 1.5f;
-    [SerializeField] private float _attackWindup = 0.15f;
+    [FormerlySerializedAs("_attackWindup")]
+    [SerializeField] private float _attackAnimationFallbackDuration = 0.15f;
     [SerializeField] private bool _stopWhileAttacking = true;
 
     private EnemyNavMeshAgent2D _navMeshAgent2D;
@@ -63,14 +65,29 @@ public class EnemyAttackRangedProjectile : EnemyAttackSOBase
 
     private IEnumerator AttackLoop()
     {
+        bool isFirstAttackInState = true;
+
         while (enemy.IsAggroed)
         {
             StopEnemyCompletely();
             FacePlayer();
 
-            yield return new WaitForSeconds(_attackWindup);
+            if (enemy.EnemyAnimator != null)
+            {
+                if (isFirstAttackInState)
+                    yield return enemy.EnemyAnimator.WaitForAttackAnimation(_attackAnimationFallbackDuration);
+                else
+                    yield return enemy.EnemyAnimator.PlayAttackAndWait(_attackAnimationFallbackDuration);
+            }
+            else
+            {
+                yield return new WaitForSeconds(_attackAnimationFallbackDuration);
+            }
 
-            ShootProjectile();
+            isFirstAttackInState = false;
+
+            if (enemy.IsAggroed)
+                ShootProjectile();
 
             yield return new WaitForSeconds(_attackCooldown);
         }
