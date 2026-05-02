@@ -12,10 +12,11 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
     public bool IsWithinStrikingDistance { get; set; }
     public bool IsNoiseHeard { get; set; }
 
+    public Transform PlayerTarget { get; private set; }
     public Vector3 InvestigationTargetPosition { get; set; }
     public float InvestigationDuration { get; set; } = 3f;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         EnemyIdleBaseInstance = Instantiate(EnemyIdleBase);
         EnemyChaseBaseInstance = Instantiate(EnemyChaseBase);
@@ -40,7 +41,7 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
         }
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         RB = GetComponent<Rigidbody2D>();
 
@@ -54,6 +55,14 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
 
     private void Update()
     {
+        // Keep PlayerTarget up to date (find if null or destroyed)
+        if (PlayerTarget == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                PlayerTarget = playerObj.transform;
+        }
+
         StateMachine.CurrentEnemyState.FrameUpdate();
     }
 
