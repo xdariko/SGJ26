@@ -24,5 +24,5 @@ MonoBehaviour:
   hookSpeed: 15
   maxHookDistance: 10
   hookDuration: 3
-  pullSpeed: 20
   enhancedAttackWindow: 2
+  screenShakeForce: 0.2

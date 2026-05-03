@@ -5,6 +5,7 @@ public class Main : MonoBehaviour
 {
     [Header("Player")]
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private PlayerCombat playerCombat;
 
     [Header("Animator Controllers")]
     [SerializeField] private RuntimeAnimatorController firstMutationController;
@@ -25,6 +26,14 @@ public class Main : MonoBehaviour
     private void Awake()
     {
         G.main = this;
+
+        if (playerCombat == null)
+        {
+            Player player = FindFirstObjectByType<Player>();
+
+            if (player != null)
+                playerCombat = player.GetComponent<PlayerCombat>();
+        }
     }
 
     private void Start()
@@ -127,26 +136,47 @@ public class Main : MonoBehaviour
 
     private void UnlockFirstAbility()
     {
-        // ТУТ ОТКРЫТИЕ ПЕРВОЙ СПОСОБНОСТИ
-        // G.player.GetComponent<PlayerSlimeShot>().enabled = true;
+        PlayerCombat combat = GetPlayerCombat();
 
-        Debug.Log("First ability unlocked");
+        if (combat == null)
+        {
+            Debug.LogWarning("Main: PlayerCombat not found, cannot unlock first ability.");
+            return;
+        }
+
+        combat.UnlockRangedAbility();
+
+        Debug.Log("First ability unlocked: Ranged attack");
     }
 
     private void UnlockSecondAbility()
     {
-        // ТУТ ОТКРЫТИЕ ВТОРОЙ СПОСОБНОСТИ
-        // G.player.GetComponent<PlayerHook>().enabled = true;
+        PlayerCombat combat = GetPlayerCombat();
 
-        Debug.Log("Second ability unlocked");
+        if (combat == null)
+        {
+            Debug.LogWarning("Main: PlayerCombat not found, cannot unlock second ability.");
+            return;
+        }
+
+        combat.UnlockHookAbility();
+
+        Debug.Log("Second ability unlocked: Hook");
     }
 
     private void UnlockThirdAbility()
     {
-        // ТУТ ОТКРЫТИЕ ТРЕТЬЕЙ СПОСОБНОСТИ
-        // G.player.GetComponent<PlayerAreaAttack>().enabled = true;
+        PlayerCombat combat = GetPlayerCombat();
 
-        Debug.Log("Third ability unlocked");
+        if (combat == null)
+        {
+            Debug.LogWarning("Main: PlayerCombat not found, cannot unlock third ability.");
+            return;
+        }
+
+        combat.UnlockAreaAttackAbility();
+
+        Debug.Log("Third ability unlocked: Area attack");
     }
 
     private void ChangePlayerAnimator(RuntimeAnimatorController controller)
@@ -183,5 +213,24 @@ public class Main : MonoBehaviour
             G.ui.ShowEndPanel();
 
         Debug.Log("Game ended");
+    }
+
+    private PlayerCombat GetPlayerCombat()
+    {
+        if (playerCombat != null)
+            return playerCombat;
+
+        if (G.player != null)
+            playerCombat = G.player.GetComponent<PlayerCombat>();
+
+        if (playerCombat == null)
+        {
+            Player player = FindFirstObjectByType<Player>();
+
+            if (player != null)
+                playerCombat = player.GetComponent<PlayerCombat>();
+        }
+
+        return playerCombat;
     }
 }

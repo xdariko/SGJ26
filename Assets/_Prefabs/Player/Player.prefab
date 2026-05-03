@@ -170,7 +170,7 @@ MonoBehaviour:
   rangedAbility: {fileID: 11400000, guid: b37b1c3eb55bb2442b91b27928c3b313, type: 2}
   hookAbility: {fileID: 11400000, guid: 8d295801d58b3fd4f8c2cfcbe522b154, type: 2}
   areaAttackAbility: {fileID: 11400000, guid: baac943e52d290047abab64e8d012e5e, type: 2}
-  autoSetupPlayer: 1
+  autoSetupPlayer: 0
   unlockAllAbilitiesByDefault: 0
 --- !u!114 &-4561844795223832708
 MonoBehaviour:
