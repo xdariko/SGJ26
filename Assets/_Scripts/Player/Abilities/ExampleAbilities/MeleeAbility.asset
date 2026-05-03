@@ -17,7 +17,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   cooldown: 1
   activationSound: {fileID: 0}
-  isUnlocked: 0
+  isUnlocked: 1
   visualEffectPrefab: {fileID: 0}
   effectDuration: 1
   attackRange: 1.5

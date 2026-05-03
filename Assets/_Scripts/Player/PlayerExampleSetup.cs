@@ -10,7 +10,7 @@ public class PlayerExampleSetup : MonoBehaviour
 
     [Header("Auto Setup")]
     public bool autoSetupPlayer = true;
-    public bool unlockAllAbilitiesByDefault = true;
+    public bool unlockAllAbilitiesByDefault = false;
 
     private void Awake()
     {
@@ -28,26 +28,19 @@ public class PlayerExampleSetup : MonoBehaviour
         AbilityManager abilityManager = GetComponent<AbilityManager>();
 
         if (player == null)
-        {
             player = gameObject.AddComponent<Player>();
-        }
 
         if (playerController == null)
-        {
             playerController = gameObject.AddComponent<PlayerController>();
-        }
 
         if (combat == null)
-        {
             combat = gameObject.AddComponent<PlayerCombat>();
-        }
 
         if (abilityManager == null)
-        {
             abilityManager = gameObject.AddComponent<AbilityManager>();
-        }
 
-        // Setup combat abilities
+        // Важно: способности надо назначать всегда,
+        // даже если они пока закрыты.
         if (combat != null)
         {
             combat.SetMeleeAbility(meleeAbility);
@@ -56,48 +49,96 @@ public class PlayerExampleSetup : MonoBehaviour
             combat.SetAreaAttackAbility(areaAttackAbility);
         }
 
-        // Setup ability manager
         if (abilityManager != null)
         {
             abilityManager.SetPlayerCombat(combat);
 
-            if (meleeAbility != null)
-            {
-                abilityManager.AddAbility("Melee", meleeAbility);
-                meleeAbility.Initialize();
-                meleeAbility.Unlock();
-            }
+            SetupMeleeAbility(abilityManager);
+            SetupRangedAbility(abilityManager, combat);
+            SetupHookAbility(abilityManager, combat);
+            SetupAreaAttackAbility(abilityManager, combat);
+        }
 
-            if (rangedAbility != null)
-            {
-                abilityManager.AddAbility("Ranged", rangedAbility);
-                rangedAbility.Initialize();
-                rangedAbility.Unlock();
+        Debug.Log("PlayerExampleSetup: abilities initialized.");
+    }
+
+    private void SetupMeleeAbility(AbilityManager abilityManager)
+    {
+        if (meleeAbility == null)
+            return;
+
+        abilityManager.AddAbility("Melee", meleeAbility);
+        meleeAbility.Initialize();
+
+        // Обычная атака открыта всегда.
+        meleeAbility.Unlock();
+    }
+
+    private void SetupRangedAbility(AbilityManager abilityManager, PlayerCombat combat)
+    {
+        if (rangedAbility == null)
+            return;
+
+        abilityManager.AddAbility("Ranged", rangedAbility);
+        rangedAbility.Initialize();
+
+        if (unlockAllAbilitiesByDefault)
+        {
+            rangedAbility.Unlock();
+
+            if (combat != null)
                 combat.UnlockRangedAbility();
-            }
+        }
+        else
+        {
+            rangedAbility.Lock();
+        }
+    }
 
-            if (hookAbility != null)
-            {
-                abilityManager.AddAbility("Hook", hookAbility);
-                hookAbility.Initialize();
-                hookAbility.Unlock();
+    private void SetupHookAbility(AbilityManager abilityManager, PlayerCombat combat)
+    {
+        if (hookAbility == null)
+            return;
+
+        abilityManager.AddAbility("Hook", hookAbility);
+        hookAbility.Initialize();
+
+        if (unlockAllAbilitiesByDefault)
+        {
+            hookAbility.Unlock();
+
+            if (combat != null)
                 combat.UnlockHookAbility();
-            }
+        }
+        else
+        {
+            hookAbility.Lock();
+        }
+    }
 
-            if (areaAttackAbility != null)
-            {
-                abilityManager.AddAbility("AreaAttack", areaAttackAbility);
-                areaAttackAbility.Initialize();
-                areaAttackAbility.Unlock();
+    private void SetupAreaAttackAbility(AbilityManager abilityManager, PlayerCombat combat)
+    {
+        if (areaAttackAbility == null)
+            return;
+
+        abilityManager.AddAbility("AreaAttack", areaAttackAbility);
+        areaAttackAbility.Initialize();
+
+        if (unlockAllAbilitiesByDefault)
+        {
+            areaAttackAbility.Unlock();
+
+            if (combat != null)
                 combat.UnlockAreaAttackAbility();
-            }
-
-            Debug.Log("PlayerExampleSetup: All abilities initialized and unlocked!");
+        }
+        else
+        {
+            areaAttackAbility.Lock();
         }
     }
 
     [ContextMenu("Setup Player Components")]
-    void SetupPlayerComponentsEditor()
+    private void SetupPlayerComponentsEditor()
     {
         SetupPlayerComponents();
     }

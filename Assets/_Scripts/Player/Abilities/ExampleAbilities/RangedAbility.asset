@@ -25,3 +25,4 @@ MonoBehaviour:
   projectileDamage: 8
   projectileLifetime: 3
   maxPiercingCount: 0
+  screenShakeForce: 0.25
