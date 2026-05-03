@@ -29,6 +29,7 @@ public class EnemyNavMeshAgent2D : MonoBehaviour
         {
             _rb.gravityScale = 0f;
             _rb.freezeRotation = true;
+            _rb.isKinematic = true; // Make kinematic to allow NavMeshAgent to control transform without physics interference
             _rb.linearVelocity = Vector2.zero;
         }
     }

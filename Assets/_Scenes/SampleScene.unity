@@ -2230,6 +2230,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3748234706713780038, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: EnemyChaseBase
+      value: 
+      objectReference: {fileID: 11400000, guid: bc42c33b006e9ce479fd7dc5ea54b183, type: 2}
+    - target: {fileID: -3748234706713780038, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: EnemyAttackBase
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c52c56cfdea9df4e89910eb2a628b0b, type: 2}
+    - target: {fileID: -3748234706713780038, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: EnemyInvestigateBase
+      value: 
+      objectReference: {fileID: 11400000, guid: e4d55080f397d8148b98de2babc04789, type: 2}
     - target: {fileID: 2957922076372244091, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.8229637
@@ -2273,6 +2285,18 @@ PrefabInstance:
     - target: {fileID: 3074346503684442499, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
       propertyPath: m_Name
       value: Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074346503684442499, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4334195195520851418, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973368013450017566, guid: 8ec4049c109a721408ae1a578194f69f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2523,6 +2547,10 @@ PrefabInstance:
     - target: {fileID: 2341976678702300400, guid: ae992fc2fa1ac9d4a99b5c3fcccee360, type: 3}
       propertyPath: m_Name
       value: Enemy_CloudExploder
+      objectReference: {fileID: 0}
+    - target: {fileID: 2341976678702300400, guid: ae992fc2fa1ac9d4a99b5c3fcccee360, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4445777809426457349, guid: ae992fc2fa1ac9d4a99b5c3fcccee360, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6036,6 +6064,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_RangedShooter
       objectReference: {fileID: 0}
+    - target: {fileID: 662649370269247422, guid: 44fbdfc3e5b01ad49aff28263a8122bb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1441424740213979211, guid: 44fbdfc3e5b01ad49aff28263a8122bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.412947
@@ -7732,9 +7764,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1848388850493726252, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7478235714970971148, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
       propertyPath: m_Name
       value: Slime
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478235714970971148, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8861619515131884537, guid: b63bf1bbae0637a4d96c3ad7be1835c0, type: 3}
       propertyPath: m_LocalPosition.x

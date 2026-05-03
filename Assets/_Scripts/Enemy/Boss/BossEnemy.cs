@@ -21,8 +21,7 @@ public class BossEnemy : Enemy
     public bool UsesHookVulnerability => useHookVulnerability;
     public List<GameObject> ActiveMinions { get; } = new List<GameObject>();
     public Animator Animator { get; set; }
-
-    protected BossAttackState bossAttackState;
+    public BossAttackControllerSO AttackController => attackController;
 
     protected override void Awake()
     {
@@ -35,18 +34,38 @@ public class BossEnemy : Enemy
     {
         base.Start();
         Debug.Log($"[BossEnemy] Start: attackController={(attackController != null ? attackController.name : "NULL")}");
+        
+        // Diagnostic checks
+        Debug.Log($"[BossEnemy] Components check:");
+        Debug.Log($"  - NavMeshAgent: {(GetComponent<UnityEngine.AI.NavMeshAgent>() != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - EnemyNavMeshAgent2D: {(GetComponent<EnemyNavMeshAgent2D>() != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - Rigidbody2D: {(GetComponent<Rigidbody2D>() != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - Animator: {(GetComponent<Animator>() != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - EnemyHealth: {(GetComponent<EnemyHealth>() != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - EnemyAggroCheck: {(GetComponentInChildren<EnemyAggroCheck>(true) != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - EnemyStrikingDistanceCheck: {(GetComponentInChildren<EnemyStrikingDistanceCheck>(true) != null ? "OK" : "MISSING")}");
+        
         if (attackController != null)
         {
             attackController.Initialize(this);
-            bossAttackState = new BossAttackState(this, StateMachine, attackController);
-            AttackState = bossAttackState;
-            Debug.Log($"[BossEnemy] BossAttackState created and assigned. Abilities count: {attackController.abilities?.Count ?? 0}");
+            Debug.Log($"[BossEnemy] AttackController initialized. Abilities count: {attackController.abilities?.Count ?? 0}");
+            if (attackController.abilities != null)
+            {
+                for (int i = 0; i < attackController.abilities.Count; i++)
+                {
+                    var entry = attackController.abilities[i];
+                    Debug.Log($"[BossEnemy] Ability {i}: Type={entry.Type}, Cooldown={entry.Cooldown}, Range={entry.MinRange}-{entry.MaxRange}");
+                }
+            }
         }
         else
         {
-            Debug.LogWarning($"BossEnemy {name} has no AttackController assigned!", this);
+            Debug.LogWarning($"[BossEnemy] AttackController is NULL! Please assign BossAttackControllerSO.", this);
         }
 
+        Debug.Log($"[BossEnemy] AttackBase check: EnemyAttackBaseInstance type: {EnemyAttackBaseInstance?.GetType().Name ?? "NULL"}");
+        Debug.Log($"[BossEnemy] AttackBase is BossAttackSO: {EnemyAttackBaseInstance is BossAttackSO}");
+        
         VulnerableToRanged = false;
         VulnerableToHook = false;
     }

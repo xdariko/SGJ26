@@ -31,7 +31,7 @@ public class EnemyIdleState : EnemyState
         // If enemy becomes aggroed, switch to Chase state
         if (enemy.IsAggroed)
         {
-            Debug.Log($"[EnemyIdleState] Enemy {enemy.name} is aggroed, switching to ChaseState");
+            Debug.LogWarning($"[EnemyIdleState] Enemy {enemy.name} is aggroed, switching to ChaseState");
             enemy.StateMachine.ChangeState(enemy.ChaseState);
         }
     }

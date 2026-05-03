@@ -54,6 +54,12 @@ public class Enemy : MonoBehaviour, IEnemyMoveable, ITriggerCheckable
     {
         RB = GetComponent<Rigidbody2D>();
 
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+            PlayerTarget = playerObject.transform;
+        else
+            Debug.LogWarning($"Enemy {name}: Player with tag Player was not found.", this);
+
         EnemyIdleBaseInstance.Initialize(gameObject, this);
         EnemyChaseBaseInstance.Initialize(gameObject, this);
         EnemyInvestigateBaseInstance.Initialize(gameObject, this);
