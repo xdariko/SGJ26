@@ -94,12 +94,12 @@ MonoBehaviour:
       volleyDelay: 0
       animationTrigger: 
     charge:
-      chargeSpeed: 0
-      chargeDuration: 0
-      chargeDamage: 0
-      aoeRadius: 0
-      windup: 0
-      vulnerableDuration: 0
+      chargeSpeed: 8
+      chargeDuration: 0.7
+      chargeDamage: 20
+      aoeRadius: 1.5
+      windup: 0.4
+      vulnerableDuration: 2
       animationTrigger: 
     dash:
       dashSpeed: 0

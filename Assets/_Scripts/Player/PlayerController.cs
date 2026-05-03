@@ -14,13 +14,11 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveDirection;
     private Vector2 lastNonZeroDirection = Vector2.down;
 
-    private bool isSprinting = false;
     private bool isDashing = false;
     private bool canDash = true;
 
     private float dashCooldownTimer;
 
-    // Dash movement
     private Vector2 dashStartPos;
     private Vector2 dashTargetPos;
     private float dashElapsed;
@@ -30,8 +28,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("PlayerController.Awake() called");
-
         if (Instance != null && Instance != this)
         {
             Debug.LogWarning("PlayerController: Duplicate instance detected, destroying this one");
@@ -47,11 +43,8 @@ public class PlayerController : MonoBehaviour
         if (animator == null)
             animator = GetComponent<Animator>();
 
-        // Prevent tunneling during dash
         if (rb != null)
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-        Debug.Log($"PlayerController initialized. Rigidbody: {rb != null}, Player: {player != null}, Animator: {animator != null}");
     }
 
     private void Update()
@@ -64,22 +57,15 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDashing)
-        {
             PerformDash();
-        }
         else
-        {
             Move();
-        }
     }
 
     private void ProcessInputs()
     {
         if (Keyboard.current == null)
-        {
-            Debug.LogWarning("PlayerController: Keyboard.current is null!");
             return;
-        }
 
         float moveX = 0f;
         float moveY = 0f;
@@ -101,16 +87,9 @@ public class PlayerController : MonoBehaviour
         if (moveDirection != Vector2.zero)
             lastNonZeroDirection = moveDirection;
 
-        bool sprintInput = Keyboard.current.leftShiftKey.isPressed;
-        bool dashInput = Keyboard.current.spaceKey.wasPressedThisFrame;
-
-        if (!dashInput)
-        {
-            if (sprintInput && !isSprinting && moveDirection != Vector2.zero)
-                StartSprint();
-            else if ((!sprintInput || moveDirection == Vector2.zero) && isSprinting)
-                StopSprint();
-        }
+        bool dashInput =
+            Keyboard.current.leftShiftKey.wasPressedThisFrame ||
+            Keyboard.current.rightShiftKey.wasPressedThisFrame;
 
         if (
             dashInput &&
@@ -121,20 +100,14 @@ public class PlayerController : MonoBehaviour
         )
         {
             TryDash();
-
-            if (isSprinting)
-                StopSprint();
         }
     }
 
     private void Move()
     {
-        float currentSpeed = playerDetails.MoveSpeed *
-                             (isSprinting ? playerDetails.SprintMultiplier : 1f);
-
         if (moveDirection.magnitude > 0.1f)
         {
-            rb.linearVelocity = moveDirection * currentSpeed;
+            rb.linearVelocity = moveDirection * playerDetails.MoveSpeed;
             lastNonZeroDirection = moveDirection;
         }
         else
@@ -153,18 +126,12 @@ public class PlayerController : MonoBehaviour
         bool isMoving = moveDirection.sqrMagnitude > 0.01f || isDashing;
         animator.SetBool("IsMoving", isMoving);
 
-        // Speed up movement animation while sprinting.
-        animator.speed = (isMoving && isSprinting) ? playerDetails.SprintMultiplier : 1f;
+        // Бега больше нет, поэтому скорость анимации всегда обычная.
+        animator.speed = 1f;
     }
 
     private void HandleTimers()
     {
-        if (isSprinting)
-        {
-            if (!player.TryUseStamina(playerDetails.SprintStaminaCostPerSecond * Time.deltaTime))
-                StopSprint();
-        }
-
         if (!canDash)
         {
             dashCooldownTimer -= Time.deltaTime;
@@ -172,17 +139,6 @@ public class PlayerController : MonoBehaviour
             if (dashCooldownTimer <= 0f)
                 canDash = true;
         }
-    }
-
-    private void StartSprint()
-    {
-        if (player.CurrentStamina > 0)
-            isSprinting = true;
-    }
-
-    private void StopSprint()
-    {
-        isSprinting = false;
     }
 
     private void TryDash()
@@ -193,11 +149,11 @@ public class PlayerController : MonoBehaviour
         Vector2 direction = lastNonZeroDirection;
         float maxDashDistance = playerDetails.DashDistance;
 
-        // Raycast to detect walls only, ignore enemies.
         Vector2 rayStart = (Vector2)transform.position + direction * 0.1f;
         float availableDistance = maxDashDistance;
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(rayStart, direction, maxDashDistance);
+
         foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider != null && hit.collider.CompareTag("Wall"))
@@ -207,14 +163,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Prevent zero-distance dashes.
         if (availableDistance <= 0.05f)
             return;
 
         if (player.TryUseStamina(playerDetails.DashStaminaCost))
-        {
             StartDash(direction, availableDistance);
-        }
     }
 
     private void StartDash(Vector2 direction, float dashDistance)
@@ -240,9 +193,7 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(newPos);
 
         if (Vector2.Distance(rb.position, dashTargetPos) < 0.01f || dashElapsed >= playerDetails.DashDuration)
-        {
             EndDash();
-        }
     }
 
     private void EndDash()
@@ -256,6 +207,7 @@ public class PlayerController : MonoBehaviour
     private void IgnoreEnemyCollisions(bool ignore)
     {
         Collider2D playerCollider = GetComponent<Collider2D>();
+
         if (playerCollider == null)
             return;
 
@@ -270,9 +222,7 @@ public class PlayerController : MonoBehaviour
                 Collider2D col = cols[i];
 
                 if (col != null && col.enabled && !col.isTrigger)
-                {
                     Physics2D.IgnoreCollision(playerCollider, col, ignore);
-                }
             }
         }
     }
@@ -283,9 +233,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         if (collision.gameObject.CompareTag("Wall"))
-        {
             EndDash();
-        }
     }
 
     public Vector2 GetMouseDirection()
@@ -300,7 +248,6 @@ public class PlayerController : MonoBehaviour
         Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePosition);
         Vector2 direction = ((Vector2)worldMousePos - (Vector2)transform.position).normalized;
 
-        Debug.Log($"Mouse direction: {direction}");
         return direction;
     }
 

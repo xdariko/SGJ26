@@ -24,6 +24,6 @@ MonoBehaviour:
   attackDamage: 15
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   effectScaleMultiplier: 2
   screenShakeForce: 0.6
