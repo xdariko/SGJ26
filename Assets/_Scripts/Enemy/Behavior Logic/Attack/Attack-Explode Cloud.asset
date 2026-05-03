@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Attack-Explode Cloud
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackExplodeCloud
   screamerSound: {fileID: 0}
-  _attackAnimationFallbackDuration: 0.35
+  _attackAnimationFallbackDuration: 0.3
   _explosionDamage: 20
   _explosionRadius: 1.2
   _playerLayer:

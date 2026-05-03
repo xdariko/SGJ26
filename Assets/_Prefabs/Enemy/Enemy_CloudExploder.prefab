@@ -96,6 +96,18 @@ PrefabInstance:
       propertyPath: EnemyAttackBase
       value: 
       objectReference: {fileID: 11400000, guid: a663e9e1cd2b2bb42a24c34d09a26eaf, type: 2}
+    - target: {fileID: 5510833760560898049, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: m_Radius
+      value: 0.39930642
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510833760560898049, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.038347006
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510833760560898049, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5722616271179368769, guid: ec5a87fd4322b924baaf99a580fe611f, type: 3}
       propertyPath: m_SizeDelta.x
       value: 80
