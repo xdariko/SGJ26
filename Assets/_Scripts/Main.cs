@@ -20,6 +20,8 @@ public class Main : MonoBehaviour
     private bool boss2StoryPlayed;
     private bool finalStoryPlayed;
 
+    private bool gameEnded;
+
     private void Awake()
     {
         G.main = this;
@@ -27,11 +29,17 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1f;
+        G.IsPaused = false;
+
         G.storyPanel?.PlaySequence("intro_01");
     }
 
     private void Update()
     {
+        if (gameEnded)
+            return;
+
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             TogglePause();
@@ -54,11 +62,12 @@ public class Main : MonoBehaviour
 
     public void ResumeGame()
     {
+        if (gameEnded)
+            return;
+
         SetPause(false);
     }
 
-    // 1. ТРИГГЕР ПОСЛЕ НАЧАЛА ИГРЫ
-    // История + первая способность + первый аниматор
     public void PlayFirstMutationStory()
     {
         if (firstStoryPlayed)
@@ -73,8 +82,6 @@ public class Main : MonoBehaviour
         });
     }
 
-    // 2. ПОСЛЕ ПЕРВОГО БОССА
-    // История + вторая способность + второй аниматор + открыть проход
     public void OnBoss1Killed()
     {
         if (boss1StoryPlayed)
@@ -90,8 +97,6 @@ public class Main : MonoBehaviour
         });
     }
 
-    // 3. ПОСЛЕ ВТОРОГО БОССА
-    // История + третья способность + третий аниматор + открыть проход
     public void OnBoss2Killed()
     {
         if (boss2StoryPlayed)
@@ -107,8 +112,6 @@ public class Main : MonoBehaviour
         });
     }
 
-    // 4. ПОСЛЕ ТРЕТЬЕГО БОССА
-    // Финальная история + конец игры
     public void OnBoss3Killed()
     {
         if (finalStoryPlayed)
@@ -124,8 +127,7 @@ public class Main : MonoBehaviour
 
     private void UnlockFirstAbility()
     {
-        // ТУТ ПИШЕШЬ ОТКРЫТИЕ ПЕРВОЙ СПОСОБНОСТИ
-        // Например:
+        // ТУТ ОТКРЫТИЕ ПЕРВОЙ СПОСОБНОСТИ
         // G.player.GetComponent<PlayerSlimeShot>().enabled = true;
 
         Debug.Log("First ability unlocked");
@@ -133,8 +135,7 @@ public class Main : MonoBehaviour
 
     private void UnlockSecondAbility()
     {
-        // ТУТ ПИШЕШЬ ОТКРЫТИЕ ВТОРОЙ СПОСОБНОСТИ
-        // Например:
+        // ТУТ ОТКРЫТИЕ ВТОРОЙ СПОСОБНОСТИ
         // G.player.GetComponent<PlayerHook>().enabled = true;
 
         Debug.Log("Second ability unlocked");
@@ -142,8 +143,7 @@ public class Main : MonoBehaviour
 
     private void UnlockThirdAbility()
     {
-        // ТУТ ПИШЕШЬ ОТКРЫТИЕ ТРЕТЬЕЙ СПОСОБНОСТИ
-        // Например:
+        // ТУТ ОТКРЫТИЕ ТРЕТЬЕЙ СПОСОБНОСТИ
         // G.player.GetComponent<PlayerAreaAttack>().enabled = true;
 
         Debug.Log("Third ability unlocked");
@@ -174,9 +174,14 @@ public class Main : MonoBehaviour
 
     private void EndGame()
     {
-        Debug.Log("Game ended");
+        gameEnded = true;
 
-        // ТУТ МОЖНО ПОКАЗАТЬ ПАНЕЛЬ КОНЦА ИГРЫ
-        // G.ui.ShowEndPanel();
+        G.IsPaused = true;
+        Time.timeScale = 0f;
+
+        if (G.ui != null)
+            G.ui.ShowEndPanel();
+
+        Debug.Log("Game ended");
     }
 }
