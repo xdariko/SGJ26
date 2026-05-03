@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: -5763506587001078958}
   - component: {fileID: 4334195195520851418}
   - component: {fileID: 7782811058380675287}
+  - component: {fileID: 2365490395768065588}
   m_Layer: 7
   m_Name: Tank
   m_TagString: Enemy
@@ -348,6 +349,19 @@ MonoBehaviour:
   _verticalPathDrift: 0.0001
   _snapToNavMeshRadius: 2
   _debugLogs: 1
+--- !u!114 &2365490395768065588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074346503684442499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 900d8c8ead2114f43b1091ce039902b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossStoryOnDestroy
+  bossIndex: 1
 --- !u!1 &3773590189628174734
 GameObject:
   m_ObjectHideFlags: 0
