@@ -197,7 +197,7 @@ MonoBehaviour:
   EnemyIdleBase: {fileID: 11400000, guid: 14054160dd338ba44b9adae7aadcac88, type: 2}
   EnemyChaseBase: {fileID: 11400000, guid: bc42c33b006e9ce479fd7dc5ea54b183, type: 2}
   EnemyInvestigateBase: {fileID: 11400000, guid: ccd5b30a07ccc86479d86f7fa006a7e8, type: 2}
-  EnemyAttackBase: {fileID: 11400000, guid: 7d77f38194037374e859d03d97869668, type: 2}
+  EnemyAttackBase: {fileID: 11400000, guid: afacd6e8541c11e40aac866fb3e61938, type: 2}
   attackController: {fileID: 11400000, guid: 37e351384dc6354479e662b03c2b1c85, type: 2}
   postSpecialDelay: 0.5
   vulnerableDuration: 2
@@ -280,4 +280,4 @@ MonoBehaviour:
   EnemyIdleBase: {fileID: 11400000, guid: 14054160dd338ba44b9adae7aadcac88, type: 2}
   EnemyChaseBase: {fileID: 11400000, guid: bc42c33b006e9ce479fd7dc5ea54b183, type: 2}
   EnemyInvestigateBase: {fileID: 11400000, guid: e4d55080f397d8148b98de2babc04789, type: 2}
-  EnemyAttackBase: {fileID: 11400000, guid: 7d77f38194037374e859d03d97869668, type: 2}
+  EnemyAttackBase: {fileID: 11400000, guid: afacd6e8541c11e40aac866fb3e61938, type: 2}
